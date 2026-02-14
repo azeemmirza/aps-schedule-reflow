@@ -1,4 +1,4 @@
-import type { ReflowInput } from '../../../neologic/src/types';
+import type { ReflowInput } from '../types';
 
 /**
  * Custom validation error thrown when input validation fails.

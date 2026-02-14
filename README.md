@@ -61,7 +61,7 @@ Once WO-A finishes later, WO-B’s earliestStart becomes the max of its planned 
 
 The result is a clean demonstration of APS-style feasibility: dependencies are enforced by scheduling in topological order and pushing downstream work only as much as required by parent completion.
 
-![Case01](./data/content/case-01.png)
+![Case01](./data/content/case-01-.png)
 
 ### Case 02 - Shift Boundary (Pause/Resume Across Days):
 
@@ -71,7 +71,7 @@ Since the work order requires 120 minutes, the scheduler consumes 60 minutes fro
 
 The important point is that the scheduler does not treat off-shift time as productive time; it explicitly pauses and resumes based on the shift calendar, which is exactly how production schedules behave in real plants.
 
-![Case02](./data/content/case-02.png)
+![Case02](./data/content/case-02-.png)
 
 ### Case 03 - Maintenance Conflict + Fixed Maintenance Work Order (Immovable):
 
@@ -81,7 +81,26 @@ The work center has a planned maintenance window from 10:00–12:00, and it also
 
 The scheduler therefore pushes WO-PROD-1 to the earliest feasible slot after maintenance—starting at 12:00—and then consumes 180 working minutes to finish at 15:00, while leaving the fixed maintenance work order unchanged.
 
-![Case03](./data/content/case-03.png)
+![Case03](./data/content/case-03-.png)
+
+
+### Case 04: Multi-parent dependencies (WO-D, WO-E, WO-F → WO-MERGE)
+
+This case models a join dependency where one “merge” work order can’t start until multiple independent parents are complete. On Extrusion Line 4, three 90-minute work orders (WO-D, WO-E, WO-F) run sequentially through the day with gaps between them, and then WO-MERGE is defined with dependsOnWorkOrderIds: ["wo-d","wo-e","wo-f"]. That means WO-MERGE’s earliestStart is the maximum end time across all three parents, so any delay in any of D/E/F pushes the merge step. 
+
+This is a very common ERP/APS pattern (assembly/pack/inspection step waiting on multiple sub-ops), and it demonstrates why we treat dependencies as a DAG and schedule children only after all parents are finalized. 
+
+![Case04](./data/content/case-04-.png)
+
+### Case 05: Weekend shifts + dependency (WO-WEEKEND-PREP → WO-WEEKEND-MAIN)
+
+This case demonstrates calendar complexity: the work center runs custom weekend shifts (Saturday 09:00–13:00, Sunday 10:00–14:00) in addition to weekday shifts. 
+
+WO-WEEKEND-PREP starts on Saturday at 11:00 with durationMinutes: 180, meaning it needs 3 hours of working time, but it must consume that time only inside shift windows. Then WO-WEEKEND-MAIN depends on the prep order and begins on Sunday at 10:00 with durationMinutes: 120. 
+
+In reflow terms, this scenario proves that the scheduler must combine two constraints simultaneously: (1) dependency readiness (MAIN cannot start before PREP completes), and (2) shift-boundary logic (work pauses outside shifts and resumes in the next valid shift window).
+
+![Case05](./data/content/case-05-.png)
 
 ## Quick Start
 

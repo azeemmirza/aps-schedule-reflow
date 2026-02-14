@@ -9,14 +9,16 @@ import type { ReflowInput } from '../src/types';
 import case01 from '../data/case-delay-cascade.json';
 import case02 from '../data/case-shift-boundary.json';
 import case03 from '../data/case-maintenance-conflict.json';
+import case04 from '../data/case-multi-parent-dependencies.json';
+import case05 from '../data/case-weekend-shift.json';
 
 describe('Production Schedule Reflow', () => {
   const logger = new Logger('debug'); // Use 'debug' to see logs during tests
   const checker = new ConstraintChecker(logger);
 
 
-  // SCENARIO 1
-  test('Scenario1: delay cascade pushes downstream dependencies', () => {
+  // Case 1
+  test('Case 1: delay cascade pushes downstream dependencies', () => {
     const svc = new ReflowService(logger);
     const res = svc.reflow(case01 as ReflowInput);
 
@@ -45,8 +47,8 @@ describe('Production Schedule Reflow', () => {
   });
 
 
-  // SCENARIO 2
-  test('Scenario2: shift boundary pauses and resumes next day', () => {
+  // CASE 2
+  test('Case 2: shift boundary pauses and resumes next day', () => {
     const svc = new ReflowService(logger);
     const res = svc.reflow(case02 as ReflowInput);
 
@@ -60,8 +62,8 @@ describe('Production Schedule Reflow', () => {
   });
 
 
-  // SCENARIO 3
-  test('Scenario3: maintenance window forces pushing work order beyond maintenance', () => {
+  // CASE 3
+  test('Case 3: maintenance window forces pushing work order beyond maintenance', () => {
     const svc = new ReflowService(logger);
     const res = svc.reflow(case03 as ReflowInput);
 
@@ -104,5 +106,56 @@ describe('Production Schedule Reflow', () => {
     }
 
     expect(() => svc.reflow(bad)).toThrow(/Circular dependency detected/);
+  });
+
+  // CASE 4
+  test('Case 4: multi-parent dependencies forces merge point to wait for all parents', () => {
+    const svc = new ReflowService(logger);
+    const res = svc.reflow(case04 as ReflowInput);
+
+    checker.validate({ workOrders: res.updatedWorkOrders, workCenters: (case04 as ReflowInput).workCenters });
+
+    const byNum = new Map(res.updatedWorkOrders.map((w) => [w.data.workOrderNumber, w]));
+    const woD = byNum.get('WO-D')!;
+    const woE = byNum.get('WO-E')!;
+    const woF = byNum.get('WO-F')!;
+    const woMerge = byNum.get('WO-MERGE')!;
+
+    const dEnd = DateTime.fromISO(woD.data.endDate, { zone: 'utc' });
+    const eEnd = DateTime.fromISO(woE.data.endDate, { zone: 'utc' });
+    const fEnd = DateTime.fromISO(woF.data.endDate, { zone: 'utc' });
+    const mergeStart = DateTime.fromISO(woMerge.data.startDate, { zone: 'utc' });
+
+    // Merge must start after all three parents complete
+    expect(mergeStart.toMillis()).toBeGreaterThanOrEqual(Math.max(dEnd.toMillis(), eEnd.toMillis(), fEnd.toMillis()));
+
+    // All should complete on same day (single work center, no conflicts if scheduled correctly)
+    expect(woMerge.data.endDate).toBe('2026-02-12T16:00:00.000Z');
+  });
+
+  // CASE 5
+  test('Case 5: weekend shift boundary with different shift hours', () => {
+    const svc = new ReflowService(logger);
+    const res = svc.reflow(case05 as ReflowInput);
+
+    checker.validate({ workOrders: res.updatedWorkOrders, workCenters: (case05 as ReflowInput).workCenters });
+
+    const byNum = new Map(res.updatedWorkOrders.map((w) => [w.data.workOrderNumber, w]));
+    const woPrep = byNum.get('WO-WEEKEND-PREP')!;
+    const woMain = byNum.get('WO-WEEKEND-MAIN')!;
+
+    // WO-WEEKEND-PREP: 180 min starting Sat 11:00
+    // Sat 11:00-13:00 = 2 hours = 120 min (Sat shift is 09:00-13:00)
+    // Sun 10:00-12:00 = 2 hours = 120 min, but only need 60 more min => 10:00-11:00
+    // Total: Sat 120 + Sun 60 = 180 min
+    expect(woPrep.data.startDate).toBe('2026-02-14T11:00:00.000Z');
+    expect(woPrep.data.endDate).toBe('2026-02-15T11:00:00.000Z');
+
+    // WO-WEEKEND-MAIN depends on WO-WEEKEND-PREP, starts after prep ends (Sun 11:00)
+    // Sun 11:00-14:00 = 3 hours = 180 min available, only need 120 min => 11:00-13:00
+    const prepEnd = DateTime.fromISO(woPrep.data.endDate, { zone: 'utc' });
+    const mainStart = DateTime.fromISO(woMain.data.startDate, { zone: 'utc' });
+    expect(mainStart.toMillis()).toBeGreaterThanOrEqual(prepEnd.toMillis());
+    expect(woMain.data.endDate).toBe('2026-02-15T13:00:00.000Z');
   });
 });

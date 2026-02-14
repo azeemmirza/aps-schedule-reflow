@@ -3,7 +3,7 @@
     "target": "ES2022",
     "lib": ["ES2022"],
     "module": "CommonJS",
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
     "outDir": "dist",
     "rootDir": ".",
     "strict": true,
@@ -17,5 +17,5 @@
     "skipLibCheck": true,
     "types": ["jest", "node"]
   },
-  "include": ["src", "test", "data/**/*.json"]
+  "include": ["src", "test", "data/**/*.json", "../neologic/src/utils/logger_.ts"]
 }

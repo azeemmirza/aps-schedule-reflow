@@ -153,14 +153,10 @@ production-schedule-reflow/
 
 ## Production Features
 
-- ✅ **Strict TypeScript** (noUncheckedIndexedAccess, exactOptionalPropertyTypes, noImplicitOverride)
-- ✅ **Custom runtime validation** (zero-dependency validator on all inputs)
-- ✅ **Jest test suite** (3 scenarios + cycle detection + constraint validation + validator tests)
-- ✅ **ESLint + Prettier** (auto-format, strict rules)
-- ✅ **GitHub Actions CI** (lint → test → build)
-- ✅ **Luxon** for timezone-aware datetime handling
-- ✅ **DAG topological sort** with cycle detection
-- ✅ **Interval algebra** for reservation merging and overlap checks
+- **Strict TypeScript** (noUncheckedIndexedAccess, exactOptionalPropertyTypes, noImplicitOverride)
+- **Jest test suite** (3 scenarios + cycle detection + constraint validation + validator tests)
+- **ESLint + Prettier** (auto-format, strict rules)
+- **GitHub Actions CI** (lint → test → build)
 
 ## License
 

@@ -1,0 +1,67 @@
+{
+  "workCenters": [
+    {
+      "docId": "wc-3",
+      "docType": "workCenter",
+      "data": {
+        "name": "Extrusion Line 3",
+        "shifts": [
+          { "dayOfWeek": 1, "startHour": 8, "endHour": 17 },
+          { "dayOfWeek": 2, "startHour": 8, "endHour": 17 },
+          { "dayOfWeek": 3, "startHour": 8, "endHour": 17 },
+          { "dayOfWeek": 4, "startHour": 8, "endHour": 17 },
+          { "dayOfWeek": 5, "startHour": 8, "endHour": 17 }
+        ],
+        "maintenanceWindows": [
+          {
+            "startDate": "2026-02-11T10:00:00.000Z",
+            "endDate": "2026-02-11T12:00:00.000Z",
+            "reason": "Planned maintenance"
+          }
+        ]
+      }
+    }
+  ],
+  "manufacturingOrders": [
+    {
+      "docId": "mo-3",
+      "docType": "manufacturingOrder",
+      "data": {
+        "manufacturingOrderNumber": "MO-3001",
+        "itemId": "pipe-6in",
+        "quantity": 300,
+        "dueDate": "2026-02-14T17:00:00.000Z"
+      }
+    }
+  ],
+  "workOrders": [
+    {
+      "docId": "wo-fixed-maint",
+      "docType": "workOrder",
+      "data": {
+        "workOrderNumber": "WO-FIXED-MAINT",
+        "manufacturingOrderId": "mo-3",
+        "workCenterId": "wc-3",
+        "startDate": "2026-02-11T08:00:00.000Z",
+        "endDate": "2026-02-11T09:00:00.000Z",
+        "durationMinutes": 60,
+        "isMaintenance": true,
+        "dependsOnWorkOrderIds": []
+      }
+    },
+    {
+      "docId": "wo-prod-1",
+      "docType": "workOrder",
+      "data": {
+        "workOrderNumber": "WO-PROD-1",
+        "manufacturingOrderId": "mo-3",
+        "workCenterId": "wc-3",
+        "startDate": "2026-02-11T09:00:00.000Z",
+        "endDate": "2026-02-11T12:00:00.000Z",
+        "durationMinutes": 180,
+        "isMaintenance": false,
+        "dependsOnWorkOrderIds": []
+      }
+    }
+  ]
+}

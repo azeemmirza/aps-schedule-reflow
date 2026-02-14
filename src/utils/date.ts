@@ -1,6 +1,6 @@
 import type { DateTime } from 'luxon';
 import { Interval } from 'luxon';
-import type { Reservation } from './interval-utils';
+import type { Reservation } from './interval';
 
 export type Shift = { dayOfWeek: number; startHour: number; endHour: number };
 

@@ -3,7 +3,6 @@ import 'jest';
 import { DateTime } from 'luxon';
 import { ReflowService } from '../src/reflow/reflow.service';
 import { ConstraintChecker } from '../src/reflow/constraint-checker';
-import { ValidationError, validateReflowInput } from '../src/utils/validation';
 import { Logger } from '../src/utils/logger';
 import type { ReflowInput } from '../src/types';
 
@@ -12,10 +11,10 @@ import scenario2 from '../data/scenario2.shift-boundary.json';
 import scenario3 from '../data/scenario3.maintenance-conflict.json';
 
 describe('Production Schedule Reflow', () => {
-  const logger = new Logger('silent'); // Use 'debug' to see logs during tests
+  const logger = new Logger('debug'); // Use 'debug' to see logs during tests
   const checker = new ConstraintChecker(logger);
 
-  
+
   // SCENARIO 1
   test('Scenario1: delay cascade pushes downstream dependencies', () => {
     const svc = new ReflowService(logger);
@@ -105,17 +104,5 @@ describe('Production Schedule Reflow', () => {
     }
 
     expect(() => svc.reflow(bad)).toThrow(/Circular dependency detected/);
-  });
-
-  test('Validation error: throws error on invalid input', () => {
-    /**
-     * Represents an invalid input scenario for testing purposes.
-     * This object is created by spreading the properties of `scenario1`
-     * and overriding the `workOrders` property with an empty array.
-     * It is used to simulate a case where no work orders are provided.
-     */
-    const invalidInput = { ...scenario1, workOrders: [] };
-
-    expect(() => validateReflowInput(invalidInput)).toThrow(ValidationError);
   });
 });

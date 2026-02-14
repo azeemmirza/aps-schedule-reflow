@@ -40,4 +40,22 @@ describe('Custom Validator', () => {
       (invalid.workCenters[0]!.data.shifts[0] as unknown as { dayOfWeek: number }).dayOfWeek = 7;
       expect(() => validateReflowInput(invalid)).toThrow(ValidationError);
     });
+
+    test('Validation error: throws error on invalid input', () => {
+    /**
+     * Represents an invalid input scenario for testing purposes.
+     * This object is created by spreading the properties of `scenario1`
+     * and overriding the `workOrders` property with an array containing
+     * an incorrectly structured work order object.
+     * It is used to simulate a case where the work order structure is invalid.
+     */
+    const invalidInput = {
+      ...scenario1,
+      workOrders: [
+        { invalidKey: 'invalidValue' },
+      ],
+    };
+
+    expect(() => validateReflowInput(invalidInput)).toThrow(ValidationError);
+  });
   });

@@ -17,7 +17,7 @@ describe('Production Schedule Reflow', () => {
   const checker = new ConstraintChecker(logger);
 
 
-  // Case 1
+  // CASE 1
   test('Case 1: delay cascade pushes downstream dependencies', () => {
     const svc = new ReflowService(logger);
     const res = svc.reflow(case01 as ReflowInput);
@@ -109,7 +109,7 @@ describe('Production Schedule Reflow', () => {
   });
 
   // CASE 4
-  test('Case 4: multi-parent dependencies forces merge point to wait for all parents', () => {
+  test('Case 4: multi-parent dependencies force merge point to wait for all parents', () => {
     const svc = new ReflowService(logger);
     const res = svc.reflow(case04 as ReflowInput);
 

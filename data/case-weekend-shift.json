@@ -1,0 +1,63 @@
+{
+  "workCenters": [
+    {
+      "docId": "wc-5",
+      "docType": "workCenter",
+      "data": {
+        "name": "Extrusion Line 5",
+        "shifts": [
+          { "dayOfWeek": 0, "startHour": 10, "endHour": 14 },
+          { "dayOfWeek": 1, "startHour": 8, "endHour": 17 },
+          { "dayOfWeek": 2, "startHour": 8, "endHour": 17 },
+          { "dayOfWeek": 3, "startHour": 8, "endHour": 17 },
+          { "dayOfWeek": 4, "startHour": 8, "endHour": 17 },
+          { "dayOfWeek": 5, "startHour": 8, "endHour": 17 },
+          { "dayOfWeek": 6, "startHour": 9, "endHour": 13 }
+        ],
+        "maintenanceWindows": []
+      }
+    }
+  ],
+  "manufacturingOrders": [
+    {
+      "docId": "mo-5",
+      "docType": "manufacturingOrder",
+      "data": {
+        "manufacturingOrderNumber": "MO-5001",
+        "itemId": "pipe-specialty",
+        "quantity": 150,
+        "dueDate": "2026-02-15T14:00:00.000Z"
+      }
+    }
+  ],
+  "workOrders": [
+    {
+      "docId": "wo-weekend-prep",
+      "docType": "workOrder",
+      "data": {
+        "workOrderNumber": "WO-WEEKEND-PREP",
+        "manufacturingOrderId": "mo-5",
+        "workCenterId": "wc-5",
+        "startDate": "2026-02-14T11:00:00.000Z",
+        "endDate": "2026-02-15T09:00:00.000Z",
+        "durationMinutes": 180,
+        "isMaintenance": false,
+        "dependsOnWorkOrderIds": []
+      }
+    },
+    {
+      "docId": "wo-weekend-main",
+      "docType": "workOrder",
+      "data": {
+        "workOrderNumber": "WO-WEEKEND-MAIN",
+        "manufacturingOrderId": "mo-5",
+        "workCenterId": "wc-5",
+        "startDate": "2026-02-15T10:00:00.000Z",
+        "endDate": "2026-02-16T09:00:00.000Z",
+        "durationMinutes": 120,
+        "isMaintenance": false,
+        "dependsOnWorkOrderIds": ["wo-weekend-prep"]
+      }
+    }
+  ]
+}

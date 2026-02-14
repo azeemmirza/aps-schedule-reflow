@@ -3,9 +3,9 @@ import { ConstraintChecker } from './reflow/constraint-checker';
 import { Logger } from './utils/logger';
 import type { ReflowInput } from './types';
 
-import scenario1 from '../data/scenario1.delay-cascade.json';
-import scenario2 from '../data/scenario2.shift-boundary.json';
-import scenario3 from '../data/scenario3.maintenance-conflict.json';
+import case01 from '../data/case-delay-cascade.json';
+import case02 from '../data/case-shift-boundary.json';
+import case03 from '../data/case-maintenance-conflict.json';
 
 const logger = new Logger('debug');
 
@@ -33,6 +33,6 @@ function runScenario(name: string, input: ReflowInput): void {
   console.log('Constraints validated');
 }
 
-runScenario('Scenario 1 - Delay Cascade', scenario1 as ReflowInput);
-runScenario('Scenario 2 - Shift Boundary', scenario2 as ReflowInput);
-runScenario('Scenario 3 - Maintenance Conflict', scenario3 as ReflowInput);
+runScenario('Scenario 1 - Delay Cascade', case01 as ReflowInput);
+runScenario('Scenario 2 - Shift Boundary', case02 as ReflowInput);
+runScenario('Scenario 3 - Maintenance Conflict', case03 as ReflowInput);

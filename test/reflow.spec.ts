@@ -6,9 +6,9 @@ import { ConstraintChecker } from '../src/reflow/constraint-checker';
 import { Logger } from '../src/utils/logger';
 import type { ReflowInput } from '../src/types';
 
-import scenario1 from '../data/scenario1.delay-cascade.json';
-import scenario2 from '../data/scenario2.shift-boundary.json';
-import scenario3 from '../data/scenario3.maintenance-conflict.json';
+import case01 from '../data/case-delay-cascade.json';
+import case02 from '../data/case-shift-boundary.json';
+import case03 from '../data/case-maintenance-conflict.json';
 
 describe('Production Schedule Reflow', () => {
   const logger = new Logger('debug'); // Use 'debug' to see logs during tests
@@ -18,9 +18,9 @@ describe('Production Schedule Reflow', () => {
   // SCENARIO 1
   test('Scenario1: delay cascade pushes downstream dependencies', () => {
     const svc = new ReflowService(logger);
-    const res = svc.reflow(scenario1 as ReflowInput);
+    const res = svc.reflow(case01 as ReflowInput);
 
-    checker.validate({ workOrders: res.updatedWorkOrders, workCenters: (scenario1 as ReflowInput).workCenters });
+    checker.validate({ workOrders: res.updatedWorkOrders, workCenters: (case01 as ReflowInput).workCenters });
 
     /**
      * A Map that organizes updated work orders by their work order numbers.
@@ -48,9 +48,9 @@ describe('Production Schedule Reflow', () => {
   // SCENARIO 2
   test('Scenario2: shift boundary pauses and resumes next day', () => {
     const svc = new ReflowService(logger);
-    const res = svc.reflow(scenario2 as ReflowInput);
+    const res = svc.reflow(case02 as ReflowInput);
 
-    checker.validate({ workOrders: res.updatedWorkOrders, workCenters: (scenario2 as ReflowInput).workCenters });
+    checker.validate({ workOrders: res.updatedWorkOrders, workCenters: (case02 as ReflowInput).workCenters });
 
     const wo = res.updatedWorkOrders[0]!;
     // Start at 16:00, duration 120:
@@ -63,9 +63,9 @@ describe('Production Schedule Reflow', () => {
   // SCENARIO 3
   test('Scenario3: maintenance window forces pushing work order beyond maintenance', () => {
     const svc = new ReflowService(logger);
-    const res = svc.reflow(scenario3 as ReflowInput);
+    const res = svc.reflow(case03 as ReflowInput);
 
-    checker.validate({ workOrders: res.updatedWorkOrders, workCenters: (scenario3 as ReflowInput).workCenters });
+    checker.validate({ workOrders: res.updatedWorkOrders, workCenters: (case03 as ReflowInput).workCenters });
 
     /**
      * A Map that organizes updated work orders by their work order number.
@@ -90,7 +90,7 @@ describe('Production Schedule Reflow', () => {
 
   test('Cycle detection: throws error on circular dependency', () => {
     const svc = new ReflowService(logger);
-    const bad = structuredClone(scenario1 as ReflowInput);
+    const bad = structuredClone(case01 as ReflowInput);
 
     // Make A depend on C -> cycle A->B->C->A
     /**

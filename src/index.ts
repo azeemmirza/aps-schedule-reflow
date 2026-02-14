@@ -3,19 +3,21 @@ import { ConstraintChecker } from './reflow/constraint-checker';
 import { Logger } from './utils/logger';
 import type { ReflowInput } from './types';
 
-import scenario1 from '../../neologic/data/scenario1.delay-cascade.json';
-import scenario2 from '../../neologic/data/scenario2.shift-boundary.json';
-import scenario3 from '../../neologic/data/scenario3.maintenance-conflict.json';
+import scenario1 from '../data/scenario1.delay-cascade.json';
+import scenario2 from '../data/scenario2.shift-boundary.json';
+import scenario3 from '../data/scenario3.maintenance-conflict.json';
+
+const logger = new Logger('debug');
 
 function runScenario(name: string, input: ReflowInput): void {
-  console.log(`\n=== ${name} ===`);
+  logger.info(`\n=== ${name} ===`);
 
   const svc = new ReflowService(new Logger('debug'));
   const result = svc.reflow(input);
 
-  console.log('Explanation:', result.explanation);
+  logger.info(`Explanation: ${result.explanation}`);
 
-  console.table(
+  logger.table(
     result.changes.map((c) => ({
       wo: c.workOrderNumber,
       wc: c.workCenterId,

@@ -1,0 +1,75 @@
+{
+  "workCenters": [
+    {
+      "docId": "wc-1",
+      "docType": "workCenter",
+      "data": {
+        "name": "Extrusion Line 1",
+        "shifts": [
+          { "dayOfWeek": 1, "startHour": 8, "endHour": 17 },
+          { "dayOfWeek": 2, "startHour": 8, "endHour": 17 },
+          { "dayOfWeek": 3, "startHour": 8, "endHour": 17 },
+          { "dayOfWeek": 4, "startHour": 8, "endHour": 17 },
+          { "dayOfWeek": 5, "startHour": 8, "endHour": 17 }
+        ],
+        "maintenanceWindows": []
+      }
+    }
+  ],
+  "manufacturingOrders": [
+    {
+      "docId": "mo-1",
+      "docType": "manufacturingOrder",
+      "data": {
+        "manufacturingOrderNumber": "MO-1001",
+        "itemId": "pipe-2in",
+        "quantity": 1000,
+        "dueDate": "2026-02-12T17:00:00.000Z"
+      }
+    }
+  ],
+  "workOrders": [
+    {
+      "docId": "wo-a",
+      "docType": "workOrder",
+      "data": {
+        "workOrderNumber": "WO-A",
+        "manufacturingOrderId": "mo-1",
+        "workCenterId": "wc-1",
+        "startDate": "2026-02-09T08:00:00.000Z",
+        "endDate": "2026-02-09T10:00:00.000Z",
+        "durationMinutes": 240,
+        "isMaintenance": false,
+        "dependsOnWorkOrderIds": []
+      }
+    },
+    {
+      "docId": "wo-b",
+      "docType": "workOrder",
+      "data": {
+        "workOrderNumber": "WO-B",
+        "manufacturingOrderId": "mo-1",
+        "workCenterId": "wc-1",
+        "startDate": "2026-02-09T10:00:00.000Z",
+        "endDate": "2026-02-09T12:00:00.000Z",
+        "durationMinutes": 120,
+        "isMaintenance": false,
+        "dependsOnWorkOrderIds": ["wo-a"]
+      }
+    },
+    {
+      "docId": "wo-c",
+      "docType": "workOrder",
+      "data": {
+        "workOrderNumber": "WO-C",
+        "manufacturingOrderId": "mo-1",
+        "workCenterId": "wc-1",
+        "startDate": "2026-02-09T12:00:00.000Z",
+        "endDate": "2026-02-09T13:00:00.000Z",
+        "durationMinutes": 60,
+        "isMaintenance": false,
+        "dependsOnWorkOrderIds": ["wo-b"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "workCenters": [
+    {
+      "docId": "wc-2",
+      "docType": "workCenter",
+      "data": {
+        "name": "Extrusion Line 2",
+        "shifts": [
+          { "dayOfWeek": 1, "startHour": 8, "endHour": 17 },
+          { "dayOfWeek": 2, "startHour": 8, "endHour": 17 },
+          { "dayOfWeek": 3, "startHour": 8, "endHour": 17 },
+          { "dayOfWeek": 4, "startHour": 8, "endHour": 17 },
+          { "dayOfWeek": 5, "startHour": 8, "endHour": 17 }
+        ],
+        "maintenanceWindows": []
+      }
+    }
+  ],
+  "manufacturingOrders": [
+    {
+      "docId": "mo-2",
+      "docType": "manufacturingOrder",
+      "data": {
+        "manufacturingOrderNumber": "MO-2001",
+        "itemId": "pipe-4in",
+        "quantity": 500,
+        "dueDate": "2026-02-13T17:00:00.000Z"
+      }
+    }
+  ],
+  "workOrders": [
+    {
+      "docId": "wo-shift",
+      "docType": "workOrder",
+      "data": {
+        "workOrderNumber": "WO-SHIFT",
+        "manufacturingOrderId": "mo-2",
+        "workCenterId": "wc-2",
+        "startDate": "2026-02-10T16:00:00.000Z",
+        "endDate": "2026-02-10T18:00:00.000Z",
+        "durationMinutes": 120,
+        "isMaintenance": false,
+        "dependsOnWorkOrderIds": []
+      }
+    }
+  ]
+}

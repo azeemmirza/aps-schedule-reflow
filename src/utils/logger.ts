@@ -59,7 +59,7 @@ export class Logger {
 
     if (typeof console.table === 'function') {
       // console.table has a loose typing, cast to any to avoid TS complaints
-      console.table(data as any);
+      console.table(data);
     } else {
       console.log(`${prefix} table:`, data);
     }

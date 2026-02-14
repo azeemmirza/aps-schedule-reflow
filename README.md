@@ -161,3 +161,8 @@ production-schedule-reflow/
 - ✅ **Luxon** for timezone-aware datetime handling
 - ✅ **DAG topological sort** with cycle detection
 - ✅ **Interval algebra** for reservation merging and overlap checks
+
+## License
+
+Licensed under the MIT License. See [LICENSE](./LICENSE) file for details.
+

@@ -43,7 +43,7 @@ In scheduling, dependencies should form a Directed Acyclic Graph (DAG). “Direc
 
 A topological sort is the standard algorithmic tool for turning a DAG into an ordered list of nodes such that every node appears after all its parents. This is exactly what a scheduler needs: if WO-B depends on WO-A, then WO-A must appear earlier in the scheduling sequence so its end time is known before scheduling WO-B. In this engine, topological sort produces the deterministic “processing order” for work orders. Once that order is computed, the scheduler can walk through it and, for each work order, compute its earliest possible start based on parent completion times. If topological sorting fails to process all nodes, it indicates a cycle, and the engine throws a descriptive error. This behavior is both mathematically correct and operationally useful—cycles are a data-quality issue and must be surfaced explicitly.
 
-### *How these concepts connect in the implementation :*
+### *How these concepts connect in the implementation:*
 
 Putting it all together: ERP provides the business structure (MOs/WOs and planned dates), APS-style reflow ensures real-world feasibility under finite capacity, and graphs provide the formal model for dependency constraints. The dependency graph is assumed to be a DAG; topological sorting converts that DAG into an execution order that guarantees correctness of precedence. After that, resource scheduling becomes a constrained placement problem on each work center’s calendar: work orders are scheduled in topo order at the earliest feasible time that respects shifts, avoids maintenance windows, and does not overlap other work on the same work center.
 
